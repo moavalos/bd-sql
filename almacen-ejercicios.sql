@@ -1,4 +1,4 @@
-USE ejercicio1;
+USE almacen;
 
 /*1. Listar los números de artículos cuyo precio se encuentre entre $100 y $1000 y su
 descripción comience con la letra A.*/

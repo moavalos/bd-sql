@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS Ejercicio1;
-USE Ejercicio1;
+CREATE DATABASE IF NOT EXISTS Almacen;
+USE Almacen;
 
-CREATE TABLE almacen1(
+CREATE TABLE almacenn(
 	nro INT(5) PRIMARY KEY NOT NULL,
     responsable VARCHAR(40) NOT NULL,
     nombre VARCHAR(40) NOT NULL
@@ -49,9 +49,9 @@ CREATE TABLE provisto_por(
     FOREIGN KEY (cod_mat) REFERENCES material (cod_mat),
     FOREIGN KEY (cod_prov) REFERENCES proveedor (cod_prov)
 );
- INSERT INTO almacen1 (nro, responsable, nombre) VALUES (34,'Martin Sanchez', 'Superchino');
- INSERT INTO almacen1 (nro, responsable, nombre) VALUES (2,'Pedrita Garcia', 'Aromos');
- INSERT INTO almacen1 (nro, responsable, nombre) VALUES (1,'Martin Sanchez', 'Tostaditas');
+ INSERT INTO almacenn (nro, responsable, nombre) VALUES (34,'Martin Sanchez', 'Superchino');
+ INSERT INTO almacenn (nro, responsable, nombre) VALUES (2,'Pedrita Garcia', 'Aromos');
+ INSERT INTO almacenn (nro, responsable, nombre) VALUES (1,'Martin Sanchez', 'Tostaditas');
 
 INSERT INTO articulo (cod_art, descrip, precio) VALUES (5, 'Limpieza', 400);
 INSERT INTO articulo (cod_art, descrip, precio) VALUES (1, 'Cocina', 100);
