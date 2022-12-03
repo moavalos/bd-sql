@@ -1,0 +1,179 @@
+# Localidad (IdLocalidad, Descripcion)
+# Plato (idPlato, Descripcion, Precio)
+# Cliente (IdCliente, Nombre, Apellido, Calle, Nro, IdLocalidad)
+# PedidoEncabezado (IdPedido, IdCliente, Fecha)
+# PedidoDetalle (IdDetalle, IdPedido, IdPlato, Cantidad)
+
+CREATE SCHEMA IF NOT EXISTS RESTAURANTE;
+
+USE RESTAURANTE;
+
+CREATE TABLE LOCALIDAD(
+IDLOCALIDAD INT PRIMARY KEY AUTO_INCREMENT,
+DESCRIPCION VARCHAR(50) NOT NULL);
+
+CREATE TABLE PLATO (
+IDPLATO INT PRIMARY KEY AUTO_INCREMENT,
+DESCRIPCION VARCHAR (30) NOT NULL,
+PRECIO DOUBLE NOT NULL);
+
+CREATE TABLE CLIENTE(
+IDCLIENTE INT PRIMARY KEY AUTO_INCREMENT,
+NOMBRE VARCHAR (20) NOT NULL,
+APELLIDO VARCHAR (20) NOT NULL,
+CALLE VARCHAR (30) NOT NULL,
+NRO INT NOT NULL,
+IDLOCALIDAD INT NOT NULL,
+FOREIGN KEY (IDLOCALIDAD) REFERENCES LOCALIDAD(IDLOCALIDAD));
+
+CREATE TABLE PEDIDOENCABEZADO(
+IDPEDIDO INT PRIMARY KEY AUTO_INCREMENT,
+IDCLIENTE INT NOT NULL,
+FECHA DATE NOT NULL,
+FOREIGN KEY (IDCLIENTE) REFERENCES CLIENTE(IDCLIENTE));
+
+CREATE TABLE PEDIDODETALLE(
+IDDETALLE INT PRIMARY KEY AUTO_INCREMENT,
+IDPEDIDO INT NOT NULL,
+IDPLATO INT NOT NULL,
+CANTIDAD INT NOT NULL,
+FOREIGN KEY(IDPEDIDO) REFERENCES PEDIDOENCABEZADO(IDPEDIDO),
+FOREIGN KEY(IDPLATO) REFERENCES PLATO(IDPLATO));
+
+INSERT INTO LOCALIDAD (DESCRIPCION) VALUES
+('Ramos Mejía'),
+('San Justo'),
+('Liniers'),
+('Moron');
+
+INSERT INTO PLATO (DESCRIPCION, PRECIO) VALUES
+('Empanada', 150.0),
+('Milanesa', 600.0),
+('Pizza', 1200.0),
+('Spaghetti', 800.0),
+('Hamburguesa', 700.0);
+
+INSERT INTO CLIENTE (NOMBRE, APELLIDO, CALLE, NRO, IDLOCALIDAD) VALUES
+('Carlos', 'Monzon', 'Tatacua', 1832, 3),
+('Ricardo', 'Echeverria', 'Cuba', 1743, 2),
+('Alberto', 'Estebanez', 'Castelli', 983, 1),
+('Jose', 'Bogarin', 'Av Mayo', 732, 1),
+('Maria', 'Elena', 'Arieta', 1582, 2);
+
+
+INSERT INTO CLIENTE (NOMBRE, APELLIDO, CALLE, NRO, IDLOCALIDAD) VALUES
+('Aina', 'Monzon', 'Tatacua', 1832, 3);
+
+INSERT INTO PEDIDOENCABEZADO (IDCLIENTE, FECHA) VALUES
+(1, '2022-01-01'),
+(3, '2022-02-23'),
+(5, '2022-04-09'),
+(2, '2022-05-14'),
+(1, '2022-03-13'),
+(4, '2022-01-10');
+
+INSERT INTO PEDIDODETALLE (IDPEDIDO, IDPLATO, CANTIDAD) VALUES
+(1, 4, 2),
+(1, 1, 6),
+(2, 5, 4),
+(3, 4, 2),
+(4, 2, 2),
+(5, 1, 12),
+(6, 2, 4),
+(6, 3, 2);
+
+INSERT INTO PEDIDODETALLE (IDPEDIDO, IDPLATO, CANTIDAD) VALUES
+(1, 1, 6),
+(1, 2, 4),
+(1, 3, 3),
+(1, 5, 1);
+
+#2-Obtener los datos de todos los clientes, ordenados por Localidad, Nombre y Apellido
+
+SELECT C.*, L.DESCRIPCION LOCALIDAD
+FROM CLIENTE C
+JOIN LOCALIDAD L ON L.IDLOCALIDAD = C.IDLOCALIDAD
+ORDER BY L.DESCRIPCION, C.NOMBRE, C.APELLIDO;
+
+#3-Informar: número de Pedido, Cantidad de Platos Distintos, Cantidad de unidades total, Importe total del pedido
+
+SELECT PD.IDPEDIDO, COUNT(PD.IDDETALLE) CANT_PLAT_DIST, SUM(PD.CANTIDAD) CANT_U_TOTAL, SUM(P.PRECIO*PD.CANTIDAD) IMPORTE_TOT
+FROM PEDIDODETALLE PD
+JOIN PLATO P ON P.IDPLATO = PD.IDPLATO
+GROUP BY PD.IDPEDIDO;
+
+#4-Mostrar un detalle de los clientes que han realizado pedidos en el mes de Enero y no realizaron ningún pedido en el mes de marzo
+
+SELECT C.*
+FROM CLIENTE C
+WHERE EXISTS( 	SELECT 1
+				FROM PEDIDOENCABEZADO PE
+                WHERE MONTH(PE.FECHA) = 1 
+                AND PE.IDCLIENTE = C.IDCLIENTE)
+AND NOT EXISTS(	SELECT 1
+				FROM PEDIDOENCABEZADO PE
+                WHERE MONTH(PE.FECHA) = 3
+                AND PE.IDCLIENTE = C.IDCLIENTE);
+                
+#5 Informar el nombre del plato mas barato de la cartaSELECT *
+
+SELECT DESCRIPCION
+FROM PLATO P
+WHERE P.PRECIO = (	SELECT MIN(P2.PRECIO)
+					FROM PLATO P2);
+                    
+#6 informar los datos completos de los clientes, la fecha de última compra y el total gastado. Deben informarse la totalidad de los clientes existentes.
+
+SELECT C.*, MAX(PE.FECHA) ULTIMA_COMPRA, SUM(P.PRECIO*PD.CANTIDAD) TOTAL_GAST
+FROM CLIENTE C
+LEFT JOIN PEDIDOENCABEZADO PE ON PE.IDCLIENTE = C.IDCLIENTE
+LEFT JOIN PEDIDODETALLE PD ON PD.IDPEDIDO = PE.IDPEDIDO
+LEFT JOIN PLATO P ON P.IDPLATO = PD.IDPLATO
+GROUP BY C.IDCLIENTE;
+
+#7 Informar los platos que han sido comprados por mas de un cliente
+
+SELECT P.*
+FROM PLATO P
+WHERE EXISTS( 	SELECT 1
+				FROM PEDIDODETALLE PD
+                JOIN PEDIDOENCABEZADO PE ON PD.IDPEDIDO = PE.IDPEDIDO
+                WHERE PD.IDPLATO = P.IDPLATO
+                GROUP BY PD.IDPLATO
+                HAVING COUNT(DISTINCT PE.IDCLIENTE) > 1);
+                
+SELECT * FROM PLATO P
+WHERE idplato IN (SELECT PD.idPlato
+FROM PedidoEncabezado PE INNER JOIN PedidoDetalle PD ON PE.IDPEDIDO = PD.IDPEDIDO 
+GROUP BY PD.idPlato
+HAVING COUNT(DISTINCT IDCLIENTE) > 1);
+
+#8 Mostrar los clientes que han pedido todos los platos del menú
+
+SELECT C.*
+FROM CLIENTE C
+WHERE NOT EXISTS( 	SELECT 1
+					FROM PLATO P 
+					WHERE NOT EXISTS(	SELECT 1
+										FROM PEDIDODETALLE PD
+										JOIN PEDIDOENCABEZADO PE ON PE.IDPEDIDO = PD.IDPEDIDO
+                                        WHERE PD.IDPLATO = P.IDPLATO
+                                        AND PE.IDCLIENTE = C.IDCLIENTE));
+                                        
+SELECT C.*
+FROM CLIENTE C
+JOIN PEDIDOENCABEZADO PE ON PE.IDCLIENTE = C.IDCLIENTE
+JOIN PEDIDODETALLE PD ON PD.IDPEDIDO = PE.IDPEDIDO
+GROUP BY C.IDCLIENTE
+HAVING COUNT(DISTINCT PD.IDPLATO) = (SELECT COUNT(*)
+									 FROM PLATO P);
+                                     
+#9-Informar la descripción y precio de los platos que no han sido comprados por ningún cliente.
+
+SELECT P.DESCRIPCION, P.PRECIO
+FROM PLATO P
+WHERE NOT EXISTS(	SELECT 1
+					FROM PEDIDODETALLE PD
+                    WHERE PD.IDPLATO = P.IDPLATO);
+                    
+
