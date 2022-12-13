@@ -43,47 +43,47 @@ insert into Trabaja(nro_persona, nro_empresa, salario, fecha_ingreso) values (11
 
 /*1. Listar el nombre y ciudad de todas las personas que trabajan en la empresa
 “Banelco”.*/
-/*select p.nombre, p.ciudad
+select p.nombre, p.ciudad
 from Persona p join Trabaja t on p.nro_persona = t.nro_persona
                 join Empresa e on e.nro_empresa = t.nro_empresa
-where e.nombre = 'Banelco';*/
+where e.nombre = 'Banelco';
 
 /*2. Listar el nombre, calle y ciudad de todas las personas que trabajan para la
 empresa “Paulinas” y ganan más de $1500.*/
-/*select p.nombre, p.calle, p.ciudad
+select p.nombre, p.calle, p.ciudad
 from Persona p join Trabaja t on p.nro_persona = t.nro_persona
                 join Empresa e on e.nro_empresa = t.nro_empresa
 where e.nombre = 'Paulinas'
-and t.salario > 1500*/
+and t.salario > 1500
 
 /*3. Listar el nombre de personas que viven en la misma ciudad en la que se halla la
 empresa en donde trabajan.*/
-/*select p.nombre
+select p.nombre
 from Persona p 
 where exists (select 1
             from Trabaja t join Empresa e on t.nro_empresa = e.nro_empresa
             where p.ciudad = e.ciudad
-            and p.nro_persona = t.nro_persona);*/
+            and p.nro_persona = t.nro_persona);
 
 /*4. Listar número y nombre de todas las personas que viven en la misma ciudad y en
 la misma calle que su supervisor NO ME SALIÓ*/
-/*select p.nro_persona, p.nombre
+select p.nro_persona, p.nombre
 from Persona p 
 where exists (select 1
             from Persona jefe 
             where p.nro_persona = jefe.nro_persona
             and jefe.ciudad = p.ciudad
-            and jefe.calle = p.calle)*/
+            and jefe.calle = p.calle)
 
 /*5. Listar el nombre y ciudad de todas las personas que ganan más que cualquier
 empleado de la empresa “Tecnosur”. TAMPOCO SALIÓ*/
-/*select p.nombre, p.ciudad
+select p.nombre, p.ciudad
 from Persona p join Trabaja t on p.nro_persona = t.nro_persona
                 join Empresa e on e.nro_empresa = t.nro_empresa
 where t.salario = (select max(t2.salario)
                     from Trabaja t2
                     where t2.nro_persona = p.nro_persona
-                    and e.nombre = 'Tecnosur');*/
+                    and e.nombre = 'Tecnosur');
 
 /*6. Listar las ciudades en las que todos los trabajadores que vienen en ellas ganan
 más de $1000.*/
@@ -95,5 +95,5 @@ select p.nombre
 from Persona p join Trabaja t on p.nro_persona = t.nro_persona
 group by p.nombre, p.nro_persona
 having count(t.nro_empresa) > 4
-and t.fecha_ingreso between '200-01-01' and '2004-03-31'
-/*NO ME SALIÓ*/
+and t.fecha_ingreso > '2000-01-01'
+and t.fecha_ingreso < '2004-03-31';

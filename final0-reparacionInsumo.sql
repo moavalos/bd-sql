@@ -135,7 +135,7 @@ UPDATE Empleado e
 SET e.sueldo = ( SELECT emp.sueldo
 				FROM Empleado emp
                 WHERE emp.cuil = '123456789')
-WHERE e.nombre LIKE '%A';
+WHERE e.nombre LIKE '%A'
 
 
 /*6. Listar la descripción de aquellos insumos que se han

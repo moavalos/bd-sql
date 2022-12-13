@@ -73,46 +73,46 @@ insert into Detalle_Venta(nro_factura, nro_detalle, id_producto, cantidad, preci
 insert into Detalle_Venta(nro_factura, nro_detalle, id_producto, cantidad, precio_unitario) values (324, 67, 07, 140.0, 150.0);
 
 /*1. Listar la cantidad de productos que tiene la empresa.*/
-/*select count(id_producto) as 'cantidad de productos'
-from Producto*/
+select count(id_producto) as 'cantidad de productos'
+from Producto
 
 /*2. Listar la descripción de productos en estado 'en stock' que tiene la empresa.*/
-/*select p.descripcion
+select p.descripcion
 from Producto p
-where p.estado = 'en stock'*7
+where p.estado = 'en stock'
 
 /*3. Listar los productos que nunca fueron vendidos.*/
-/*select p.id_producto
+select p.id_producto
 from Producto p join Detalle_Venta dv on p.id_producto = dv.id_producto
-where dv.id_producto is null*/
+where dv.id_producto is null
 
 /*4. Listar la cantidad total de unidades que fueron vendidas de cada producto
 (descripción).*/
-/*select sum(dv.cantidad), p.id_producto
+select sum(dv.cantidad), p.id_producto
 from Detalle_Venta dv join Producto p on dv.id_producto = p.id_producto
-group by p.descripcion*/
+group by p.descripcion
 
 /*5. Listar el nombre de cada vendedor y la cantidad de ventas realizadas en el año
 2015.*/
-/*select count(vta.nro_factura)
+select count(vta.nro_factura)
 from Venta vta join Vendedor vdr on vdr.id_vendedor = vta.id_vendedor
-where vta.fecha between '2015-01-01' and '2015-12-31'*/
+where vta.fecha between '2015-01-01' and '2015-12-31'
 
 /*6. Listar el monto total vendido por cada cliente (nombre)*/
-/*select sum(dv.precio_unitario) as 'monto total', c.nombre
+select sum(dv.precio_unitario) as 'monto total', c.nombre
 from Detalle_Venta dv join Venta v on dv.nro_factura = v.nro_factura
                     join Cliente c on c.id_cliente = v.id_cliente
-group by c.nombre, dv.precio_unitario*/
+group by c.nombre, dv.precio_unitario
 
 /*7. Listar la descripción de aquellos productos en estado ‘sin stock’ que se hayan
 vendido en el mes de Enero de 2015*/
-/*select p.descripcion
+select p.descripcion
 from Producto p join Detalle_Venta dv on p.id_producto = dv.id_producto
                 join Venta v on v.nro_factura = dv.nro_factura
 where p.estado = 'sin stock'
 and Month(v.fecha) in 1
 and Year(v.fecha) in 2015
-group by p.descripción, p.id_producto, v.fecha, dv.nro_factura*/
+group by p.descripción, p.id_producto, v.fecha, dv.nro_factura
 
 select p.descripcion
 from Producto p

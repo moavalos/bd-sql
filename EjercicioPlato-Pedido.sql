@@ -79,17 +79,17 @@ INSERT INTO Pedido_Detalle (id_pedido, id_plato, cantidad) VALUES
 (1, 5, 1);
 
 /*2-Obtener los datos de todos los clientes, ordenados por Localidad, Nombre y Apellido*/
-/*select c.*
+select c.*
 from Cliente c join Localidad l on c.id_localidad = l.id_localidad
-order by l.id_localidad, c.nombre, c.apellido*/
+order by l.id_localidad, c.nombre, c.apellido
 
 /*3-Informar: número de Pedido, Cantidad de Platos Distintos, Cantidad de unidades total, Importe total del pedido*/
-/*select pd.id_pedido, count(pd.id_detalle) as 'cantidad de platos', sum(pd.cantidad) as 'cantidad unidades', sum(p.precio*pd.cantidad) as 'importe total'
+select pd.id_pedido, count(distinct pd.id_detalle) as 'cantidad de platos', sum(pd.cantidad) as 'cantidad unidades', sum(p.precio*pd.cantidad) as 'importe total'
 from Pedido_Detalle pd join Plato p on pd.id_plato = p.id_plato
-group by pd.id_pedido*/
+group by pd.id_pedido
 
 /*4-Mostrar un detalle de los clientes que han realizado pedidos en el mes de Enero y no realizaron ningún pedido en el mes de marzo*/
-/*select c.*
+select c.*
 from Cliente c
 where exists (select 1
             from Pedido_Encabezado pe
@@ -98,10 +98,10 @@ where exists (select 1
 and not exists (select 1
                 from Pedido_Encabezado pe
                 where c.id_cliente = pe.id_cliente
-                and Month(pe.fecha) = 3)*/
+                and Month(pe.fecha) = 3)
 
 /*5 Informar el nombre del plato mas barato de la cartaSELECT * */
-/*select *
+select *
 from Plato
 group by id_plato, descripcion
 having min(precio)*/
@@ -113,33 +113,33 @@ where precio = (select min (p2.precio)
                 from plato p2)*/
 
 /*6 informar los datos completos de los clientes, la fecha de última compra y el total gastado. Deben informarse la totalidad de los clientes existentes.*/
-/*select c.*, max(pe.fecha) as 'fecha ultima compra', sum(precio * pd.cantidad) as 'total gastado'
+select c.*, max(pe.fecha) as 'fecha ultima compra', sum(precio * pd.cantidad) as 'total gastado'
 from Cliente c join Pedido_Encabezado pe on c.id_cliente = pe.id_cliente 
                 join Pedido_Detalle pd on pe.id_pedido = pd.id_pedido
                 join Plato p on pd.id_plato = p.id_plato
-group by c.id_cliente7*/
+group by c.id_cliente
 
 /*7 Informar los platos que han sido comprados por mas de un cliente*/
-/*select p.*
+select p.*
 from Plato p 
 where exists ( select 1
             from Pedido_Detalle pd join Pedido_Encabezado pe on pd.id_pedido = pe.id_pedido
             where pd.id_plato = p.id_plato
             group by pd.id_plato
-            having count(distinct pe.id_cliente) > 1)*/
+            having count(distinct pe.id_cliente) > 1)
 
 /*8 Mostrar los clientes que han pedido todos los platos del menú*/
-/*select c.*
+select c.*
 from Cliente c
 join Pedido_Encabezado pe on pe.id_cliente = c.id_cliente
 join Pedido_Detalle pd on pd.id_pedido = pe.id_pedido
 group by c.id_cliente
 having count(distinct pd.id_plato) = (select count(*)
-                                        from Plato p)*/
+                                        from Plato p)
 
 /*9-Informar la descripción y precio de los platos que no han sido comprados por ningún cliente.*/
-/*select p.descripcion, p.precio
+select p.descripcion, p.precio
 from Plato p
 where not exists (select 1
                 from Pedido_Detalle pd
-                where pd.id_plato = p.id_plato)*/
+                where pd.id_plato = p.id_plato)

@@ -92,96 +92,97 @@ INSERT INTO Provisto_por(cod_mat, cod_prov) VALUES (9,41);
 
 /*1. Listar los números de artículos cuyo precio se encuentre entre $100 y $1000 y su
 descripción comience con la letra A.*/
-/*select cod_art
+select cod_art
 from Articulo 
 where precio between 100 and 1000
-and descripcion like 'A%';*/
+and descripcion like 'A%';
 
 /*2. Listar todos los datos de todos los proveedores.*/
-/*select *
-from Proveedor;*/
+select *
+from Proveedor;
 
 /*3. Listar la descripción de los materiales de código 1, 3, 6, 9 y 18.*/
-/*select descripcion
+select descripcion
 from Material
-where cod_mat IN (1,3,6,9,18);*/
+where cod_mat IN (1,3,6,9,18);
 
 /*4. Listar código y nombre de proveedores de la calle Suipacha, que hayan sido dados
 de alta en el año 2001*/
-/*select cod_prov, nombre
+select cod_prov, nombre
 from Proveedor
 where domicilio like '%Suipacha%'
-and fecha_alta >= '2001-01-01' and '2002-01-01'*/
+and fecha_alta >= '2001-01-01' and '2002-01-01'
 
 /*5. Listar nombre de todos los proveedores y de su ciudad.*/
-/*select p.nombre as proveedor", c.nombre as "ciudad"
-from Proveedor p left join Ciudad c on p.cod_ciu = c.cod_ciu*/
+select p.nombre as proveedor, c.nombre as "ciudad"
+from Proveedor p left join Ciudad c on p.cod_ciu = c.cod_ciu
 
 /*6. Listar los nombres de los proveedores de la ciudad de La Plata.*/
-/*select p.nombre
+select p.nombre
 from Proveedor p left join Ciudad c on p.cod_ciu = c.cod_ciu
-where c.nombre = 'La Plata'*/
+where c.nombre = 'La Plata'
 
 /*7. Listar los números de almacenes que almacenan el artículo de descripción A.*/
-/*select distinct c.nro
+select distinct c.nro
 from Contiene c join Articulo art on c.cod_art = art.cod_art
-where art.descripcion = 'A';*/
+where art.descripcion = 'A';
 
 /*8.Listar los materiales (código y descripción) provistos por proveedores de la ciudad
 de Rosario*/
-/*select distinct mat.cod_mat, mat.descripcion
+select distinct mat.cod_mat, mat.descripcion
 from Material mat join Provisto_por pp on mat.cod_mat = pp.cod_mat 
                 join Proveedor p on p.cod_prov = pp.cod_prov
                 join Ciudad c on c.cod_ciu = p.cod_ciu
-where c.nombre = "Rosario"*/
+where c.nombre = "Rosario"
 
 /*9. Listar los nombres de los proveedores que proveen materiales para artículos
 ubicados en almacenes que Martín Gómez tiene a su cargo.*/
-/*select p.nombre
+select p.nombre
 from Proveedor p join Provisto_por pp on p.cod_prov = pp.cod_prov
                 join Compuesto_por cp on cp.cod_mat = pp.cod_mat
                 join Contiene c on c.cod_art = cp.cod_art
                 join Almacen a on a.nro = c.nro
-where a.responsable = "Martín Gómez"*/
+where a.responsable = "Martín Gómez"
 
 /*12. Indicar la cantidad de proveedores que comienzan con la letra F*/
-/*select count(cod_prov)
+select count(cod_prov)
 from Proveedor
-where nombre like 'F%'*/
+where nombre like 'F%'
 
 /*13. Listar el promedio de precios de los artículos por cada almacén (nombre)*/
-/*select avg(art.precio) as "promedio de precios", a.nombre
+select avg(art.precio) as "promedio de precios", a.nombre
 from Articulo art join Contiene c on art.cod_art = c.cod_art
                 join Almacen a on a.nro = c.nro
-group by a.nombre*/
+group by a.nombre
 
 /*14. Listar la descripción de artículos compuestos por al menos 2 materiales*/
- /*select art.descripcion
+ select art.descripcion
  from Articulo art join Compuesto_por cp on art.cod_art = cp.cod_art
  group by art.descripcion, art.cod_art
- having count(*) >= 2*/
+ having count(*) >= 2
  
 /*15. Listar cantidad de materiales que provee cada proveedor (código, nombre y
 domicilio)*/
-/*select count(pp.cod_mat) as "cantidad de materiales", p.cod_prov, p.nombre, p.domicilio
+select count(pp.cod_mat) as "cantidad de materiales", p.cod_prov, p.nombre, p.domicilio
 from Provisto_por pp join Proveedor p on p.cod_prov = pp.cod_prov
-group by p.cod_prov, p.nombre, p.domicilio*/
+group by p.cod_prov, p.nombre, p.domicilio
 
 /*16. Cuál es el precio máximo de los artículos que proveen los proveedores de la ciudad
 de Zárate.*/
-/*select max(art.precio) as "Precio maximo"
+select max(art.precio) as "Precio maximo"
 from Articulo art join Compuesto_por cp on art.cod_art = cp.cod_art
                 join Provisto_por pp on pp.cod_mat = cp.cod_mat
                 join Proveedor p on p.cod_prov = pp.cod_prov
                 join Ciudad c on c.cod_ciu = p.cod_ciu
-where c.nombre = "Zárate"*/
+where c.nombre = "Zárate"
 
 /*17. Listar los nombres de aquellos proveedores que no proveen ningún material.*/
-/*select p.nombre
+select p.nombre
 from Proveedor p left join Provisto_por pp on p.cod_prov = pp.cod_prov
-where pp.cod_prov is null*/
+where pp.cod_prov is null
 
-/*SELECT prov.nombre
+/*otra forma
+SELECT prov.nombre
     FROM proveedor prov 
     WHERE NOT EXISTS (SELECT 1 
 						FROM provisto_por pp
@@ -189,7 +190,7 @@ where pp.cod_prov is null*/
 
 /*18.Listar los códigos de los materiales que provea el proveedor 10 y no los provea el
 proveedor 15. */
-/*select m.cod_mat
+select m.cod_mat
 from Material m
 where exists (select 1
                 from Provisto_por pp
@@ -198,11 +199,11 @@ where exists (select 1
 and not exists ( select 1
                 from Provisto_por pp2
                 where m.cod_mat = pp2.cod_mat
-                and pp2.cod_prov = 15);*/
+                and pp2.cod_prov = 15);
 
 /*19. Listar número y nombre de almacenes que contienen los artículos de descripción A
 y los de descripción B (ambos).*/
-/*select a.nro, a.nombre
+select a.nro, a.nombre
 from Almacen a 
 where exists (select 1 
              from Contiene c join Articulo art on art.cod_art = c.cod_art
@@ -211,67 +212,67 @@ where exists (select 1
 and exists (select 1 
              from Contiene c2 join Articulo art2 on art2.cod_art = c2.cod_art
              where a.nro = c2.nro 
-             and art2.descripcion = 'A')*/
+             and art2.descripcion = 'A')
 
 /*20. Listar la descripción de artículos compuestos por todos los materiales.*/
-/*select a.descripcion
+select a.descripcion
 from Articulo a 
 where not exists(select 1
                 from Material m
                 where not exists(select 1
                                 from Compuesto_por cp
                                 where cp.cod_art = a.cod_art
-                                and cp.cod_mat = m.cod_mat))*/
+                                and cp.cod_mat = m.cod_mat))
 
 /*21. Hallar los códigos y nombres de los proveedores que proveen al menos un material
 que se usa en algún artículo cuyo precio es mayor a $100.*/
-/*select p.cod_prov, p.nombre
+select p.cod_prov, p.nombre
 from Proveedor p 
 where exists( select 1
             from Provisto_por pp join Compuesto_por cp on cp.cod_mat = pp.cod_mat
                                 join Articulo art on art.cod_art = cp.cod_art
             where p.cod_prov = pp.cod_prov
-            and art.precio > 100)*/
+            and art.precio > 100)
 
 /*22. Listar la descripción de los artículos de mayor precio*/
-/*select a.descripcion
+select a.descripcion
 from Articulo a
 where precio = (select max(a2.precio)
-                from Articulo a2)*/
+                from Articulo a2)
 
 /*23. Listar los nombres de proveedores de Capital Federal que sean únicos
 proveedores de algún material.*/
-/*select distinct p.nombre
+select distinct p.nombre
 from Proveedor p join Ciudad c on p.cod_ciu = c.cod_ciu
                 join Provisto_por pp on pp.cod_prov = p.cod_prov
 where c.nombre = 'Capital federal' 
 and exists ( select pp2.cod_mat
                         from Provisto_por pp2
                         group by pp2.cod_mat
-                        having count(*) = 1);*/
+                        having count(*) = 1);
 
 /*24. Listar los nombres de almacenes que almacenan la mayor cantidad de artículos*/
-/*select a.nombre
+select a.nombre
 from Almacen a join Contiene c on c.nro = a.nro
 group by a.nro, a.nombre
 having count(*) = (select  max(nroAlm, cantArt)
                     from (select count(*) as cantArt
                             from Contiene c2
-                            group by c2.nro as nroAlm))*/
+                            group by c2.nro as nroAlm))
 
 /*25. Listar la ciudades donde existan proveedores que proveen todos los materiales.*/
-/*select c.nombre, c.cod_ciu
+select c.nombre, c.cod_ciu
 from Proveedor p join Ciudad c on c.cod_ciu = p.cod_ciu
 where not exists (select 1
                     from Material mat
                     where not exists(select 1
                                         from Provisto_por pp 
                                         where p.cod_prov = pp.cod_prov
-                                        and pp.cod_mat = mat.cod_mat))*/
+                                        and pp.cod_mat = mat.cod_mat))
 
 /*26. Listar los números de almacenes que tienen todos los artículos que incluyen el
 material con código 123.*/
-/*select a.nro
+select a.nro
 from Almacen a
 where not exists (select 1
                 from Articulo art join Compuesto_por cp on art.cod_art = cp.cod_art
@@ -279,4 +280,4 @@ where not exists (select 1
                 and not exists (select 1
                                 from Contiene c 
                                 where c.nro = a.nro
-                                and c.cod_art = art.cod_art))*/
+                                and c.cod_art = art.cod_art))
