@@ -110,6 +110,13 @@ where not exists (select 1
                                     from Compuesto_por cp
                                     where cp.id_pieza = p.id_pieza
                                     and cp.id_electrodomestico = e.id_electrodomestico));
+/*otra forma*/
+/*NOTA: si cambias en el having por la pk de pieza funciona igual*/
+select p.descripcion
+from Pieza p join Compuesto_por cp on p.id_pieza = cp.id_pieza
+            join Electrodomestico e on cp.id_electrodomestico = e.id_electrodomestico
+group by p.id_pieza
+having count(distinct cp.id_electrodomestico) = count(e.id_electrodomestico);
 
 /*Indicar el nombre y precio de electrodomésticos compuestos por alguna pieza provista por un
 proveedor de provincias con impuesto superior a 1,85*/

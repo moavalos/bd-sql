@@ -118,6 +118,12 @@ where not exists (select 1
                                     from Alquiler a
                                     where a.id_vehiculo = v.id_vehiculo
                                     and a.id_cliente = c.id_cliente));
+/*otra forma*/
+select v.patente, v.año_patentamiento
+from Vehiculo v join Alquiler a on a.id_vehiculo = v.id_vehiculo
+                join Cliente cl on cl.id_cliente = a.id_cliente
+group by v.id_vehiculo
+having count(distinct a.id_cliente) = count(cl.id_cliente);
 
 /*Elimine todos los alquileres realizados a clientes cuyo nombre comienza con la letra A,
 donde la fecha de alquiler sea 21/05/2013, el vehículo tenga 5 plazas y no se haya

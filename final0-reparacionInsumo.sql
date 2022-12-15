@@ -149,6 +149,12 @@ where not exists (select 1
                                     from Reparacion_Insumo reIn
                                     where reIn.nro_insumo = i.nro_insumo
                                     and reIn.nro_reparacion = re.nro_reparacion))
+/*otra forma*/
+select i.descripcion
+from Insumo i join Reparacion_Insumo ri on ri.nro_insumo = i.nro_insumo
+            join Reparacion re on ri.nro_reparacion = re.nro_reparacion
+group by i.nro_insumo
+having count(distinct ri.nro_reparacion) = count(re.nro_reparacion);
 
 
 /*7. Indicar el sueldo máximo de los empleados por cada

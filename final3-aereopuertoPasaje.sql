@@ -93,6 +93,15 @@ where not exists (select 1
                                 where pje.id_pasajero = p.id_pasajero
                                 and pje.id_vuelo = v.id_vuelo));
 
+/*otra forma*/
+select p.nombre
+from Pasajero p join Pasaje pje on pje.id_pasajero = p.id_pasajero
+                join Vuelo v on pje.id_vuelo = v.id_vuelo
+group by p.id_pasajero
+having count(distinct pje.id_vuelo) = count(v.id_vuelo)
+                                    /*(select count(*)
+                                    from Vuelo v);*/
+
 /* A todos los clientes que viajen desde el aeropuerto de nombre “Ezeiza” el día 18/07/2021,
 se le deberá hacer una bonificación del 10% en el importe de todos los pasajes adquiridos.
 Realice la modificación de datos correspondiente.*/
